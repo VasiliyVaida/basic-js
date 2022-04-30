@@ -17,15 +17,28 @@ const { NotImplementedError } = require('../extensions/index.js');
 const membersArr = ['Olivia', 1111, 'Lily', 'Oscar', true, null];
 
 function createDreamTeam(arr) {
+  if (!Array.isArray(arr)) {
+    return false;
+  }
   let namesArr = [];
   arr.forEach((item, index) => {
-    if (typeof item === 'string') {
+    if (typeof item === 'string' && item[0] !== ' ') {
       namesArr.push(item[0].toUpperCase());
+    } else if (typeof item === 'string' && item[0] === ' ') {
+      let wordArr = item.split('');
+      for (let i = 0; i < wordArr.length; i++) {
+        if (wordArr[i] !== ' ') {
+          namesArr.push(wordArr[i].toUpperCase());
+          break;
+        }
+      }
     }
   });
   namesArr.sort();
-  return namesArr;
+  return namesArr.join('');
 }
+
+createDreamTeam(membersArr);
 
 module.exports = {
   createDreamTeam,
