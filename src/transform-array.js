@@ -18,36 +18,30 @@ function transform(arr) {
     throw new Error(`'arr' parameter must be an instance of the Array!`);
   }
 
-  let cloneArr = arr.slice();
+  let cloneArr = [];
 
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i] == '--discard-prev' && i != 0) {
-      cloneArr.splice(i - 1, 1);
-      cloneArr.splice(i, 1);
+    if (typeof arr[i] === 'number') {
+      if (arr[i - 1] !== '--discard-next') {
+        cloneArr.push(arr[i]);
+      }
     }
 
-    if (arr[i] == '--discard-next' && i != arr.length - 1) {
-      cloneArr.splice(i + 1, 1);
-      cloneArr.splice(i, 1);
+    if (arr[i] == '--discard-prev' && i != 0) {
+      if (arr[i - 2] !== '--discard-next') {
+        cloneArr.pop();
+      }
     }
 
     if (arr[i] == '--double-next' && i != arr.length - 1) {
-      cloneArr.splice(i + 1, 0, arr[i + 1]);
-      cloneArr.splice(i, 1);
+      cloneArr.push(arr[i + 1]);
     }
 
     if (arr[i] == '--double-prev' && i != 0) {
-      cloneArr.splice(i + 1, 0, arr[i - 1]);
-      cloneArr.splice(i, 1);
+      if (arr[i - 2] !== '--discard-next') {
+        cloneArr.push(arr[i - 1]);
+      }
     }
-  }
-
-  if (cloneArr[0] === '--discard-prev' || cloneArr[0] === '--double-prev') {
-    cloneArr.splice(0, 1);
-  }
-
-  if (cloneArr[arr.length - 1] === '--double-next' || cloneArr[arr.length - 1] === '--discard-next') {
-    cloneArr.splice(arr.length - 1, 1);
   }
 
   return cloneArr;
